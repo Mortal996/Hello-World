@@ -9,6 +9,7 @@
 + 购买vps
   + [挖站否](https://wzfou.com/vps-bangdan)
   + [Vultr](https://www.vultr.com)
+  + [CloudCone](https://app.cloudcone.com/?ref=9510)
   + [AWS](https://aws.amazon.com)
   + [搬瓦工库存](https://teddysun.com/bwh.html)
 + 购买域名  
