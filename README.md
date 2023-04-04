@@ -14,6 +14,7 @@
   + [搬瓦工库存](https://teddysun.com/bwh.html)
 + 购买域名  
   + [Namesilo](https://www.namesilo.com/?rid=a5e2f22jo)  
+  + [GoDaddy](https://www.godaddy.com/)
 + 域名托管
   + [Cloudflare](https://dash.cloudflare.com)  
 + SSH连接
