@@ -13,7 +13,7 @@
   + [AWS](https://aws.amazon.com)
   + [搬瓦工库存](https://teddysun.com/bwh.html)
 + 购买域名  
-  + [Namesilo](https://www.namesilo.com)  
+  + [Namesilo](https://www.namesilo.com/?rid=a5e2f22jo)  
 + 域名托管
   + [Cloudflare](https://dash.cloudflare.com)  
 + SSH连接
