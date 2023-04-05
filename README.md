@@ -3,8 +3,9 @@
 >**_The sun in the head, like a free man._**  
 >阳光洒肩头，仿佛自由人。
 ## 学习强国  
-### 机场
+
 ### 自建
+
 #### 准备
 + 购买vps
   + [挖站否](https://wzfou.com/vps-bangdan)
@@ -26,15 +27,209 @@
   + [whoer](https://whoer.net/zh)
   + [IP/DNS](https://ipleak.net)
   + [My IP](https://browserleaks.com/ip)
+
+#### [DD系统](https://blog.laoda.de/archives/dd)
++ 准备工作
+```
+# Debian 与 Ubuntu
+apt-get install -y xz-utils openssl gawk file
+```
++ 一键脚本
+```
+wget --no-check-certificate -O AutoReinstall.sh https://git.io/AutoReinstall.sh && bash AutoReinstall.sh
+```
+>密码：Centos默认密码`Pwd@CentOS`，其它系统`Pwd@Linux`
++ 输入`cat /etc/os-release`查看版本
++ 常用的命令
+```
+apt install sudo curl wget 
+```
++ 更新安装包索引
+```
+apt update 
+
+apt upgrade 
+```
+#### [开启 TCP BBR 拥塞控制算法](https://blog.laoda.de/archives/hello-docker#5%E5%AE%89%E8%A3%85dockerdocker-compose)  
+新的 TCP 拥塞控制算法 BBR (Bottleneck Bandwidth and RTT) 可以让服务器的带宽尽量跑满，并且尽量不要有排队的情况，让网络服务更佳稳定和高效。
+
+Linux Kernel 内核升级到 4.9 及以上版本可以实现 BBR 加速（Ubuntu 18.04 默认的内核是 4.15版本的内核，Ubuntu 20.04 默认的内核是 5.4 版本的内核，并已经默认编译了 TCP BBR 模块，可以直接通过参数开启）。
+
+目前 De­bian 10 自带的内核版本一般是4.19，我们可以查看一下内核版本（如果是 5.6 及以上内核则集成了 Wire­Guard ）  
+`hostnamectl`   #或者 `uname -r`查看内核版本  
+
+1.给 Debian 10 添加官方 backports 源，获取更新的软件库
+```
+sudo nano /etc/apt/sources.list
+```
+2.然后把下面这一条加在最后，并保存退出。
+```
+deb http://deb.debian.org/debian buster-backports main
+```
+3.刷新软件库并查询 Debian 官方的最新版内核并安装。请务必安装你的 VPS 对应的版本（本文以比较常见的【amd64】为例）。
+```
+sudo apt update && sudo apt -t buster-backports install linux-image-amd64
+```
+4.修改 kernel 参数配置文件 sysctl.conf 并指定开启 BBR
+```
+sudo nano /etc/sysctl.conf
+```
+5.把下面的内容添加进去
+```
+net.core.default_qdisc=fq
+net.ipv4.tcp_congestion_control=bbr
+```
+6.重启 VPS、使内核更新和BBR设置都生效
+```
+sudo reboot
+```
+如果你想确认 BBR 是否正确开启，可以使用下面的命令：
+```
+lsmod | grep bbr
+```
+如果你想确认 fq 算法是否正确开启，可以使用下面的命令：
+```
+sch_fq
+```
+>一键开启BBR
+>注意：需要Linux Kernel 内核升级到 4.9 及以上版本可以实现 BBR 加速
+```
+uname -srm
+
+Linux 3.10.0-957.12.2.el7.x86_64 x86_64
+3 - 内核版本.
+10 - 主修订版本.
+0-957 - 次要修订版本.
+12 - 补丁版本.
+```
+>Ubuntu18.04以上就可以(默认的内核4.15)
+```
+echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
+echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
+
+sysctl -p
+
+sysctl net.ipv4.tcp_available_congestion_control
+
+lsmod | grep bbr
+```
+
+#### 修改时间
+```
+apt update -y && apt upgrade -y  #更新一下包
+```
+查看时间：
+```
+timedatectl
+```
+```
+timedatectl list-timezones #列出所有时区
+```
+```
+sudo timedatectl set-timezone Asia/Hong_Kong #改成香港
+```
+
+#### 添加SWAP
+swap是Linux中的虚拟内存，用于扩充物理内存不足而用来存储临时数据存在的。它类似于Windows中的虚拟内存。在Windows中，只可以使用文件来当作虚拟内存。而linux可以文件或者分区来当作虚拟内存。
+
+这个虚拟内存对于内存小的VPS非常有必要，可以提高我们的运行效率。
+```
+wget -O box.sh https://raw.githubusercontent.com/BlueSkyXN/SKY-BOX/main/box.sh && chmod +x box.sh && clear && ./box.sh
+```
+18
+
+#### 安装Docker、Docker-compose
++ 更新、安装必备软件
+```
+apt-get update && apt-get install -y wget vim
+```
++ 非大陆Docker安装
+```
+wget -qO- get.docker.com | bash
+```
++ 查看Docker版本
+```
+docker -v
+```
++ 开机自动启动
+```
+systemctl enable docker
+```
++ 卸载Docker
+```
+sudo apt-get purge docker-ce docker-ce-cli containerd.io
+
+sudo rm -rf /var/lib/docker
+sudo rm -rf /var/lib/containerd
+```
++ 非大陆Docker-compose安装
+```
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+```
++ 修改Docker配置
+```
+cat > /etc/docker/daemon.json <<EOF
+{
+    "log-driver": "json-file",
+    "log-opts": {
+        "max-size": "20m",
+        "max-file": "3"
+    },
+    "ipv6": true,
+    "fixed-cidr-v6": "fd00:dead:beef:c0::/80",
+    "experimental":true,
+    "ip6tables":true
+}
+EOF
+```
++ 重启 Docker 服务
+```
+systemctl restart docker
+```
+
+#### 整理一些常用的脚本
++ 检测是否可以访问ChatGPT脚本
+```
+bash <(curl -Ls https://cpp.li/openai)
+```
++ 杜甫测试
+```
+wget -q https://github.com/Aniverse/A/raw/i/a && bash a
+```
++ 显示延迟、抖动
+```
+bash <(wget -qO- https://bench.im/hyperspeed)
+```
++ 显示回程线路
+```
+curl https://raw.githubusercontent.com/zhucaidan/mtr_trace/main/mtr_trace.sh|bash
+
+wget -q route.f2k.pub -O route && bash route
+
+```
++ 带综合测试的版本（CPU信息、Geekbench等）
+```
+bash <(wget --no-check-certificate -O- https://dl.233.mba/d/sh/superbenchpro.sh)
+```
++ 测试IPv4优先还是IPv6优先
+```
+curl ip.p3terx.com
+```
++ 全媒体测试
+```
+bash <(curl -L -s https://raw.githubusercontent.com/lmc999/RegionRestrictionCheck/main/check.sh)
+```
++ 奈飞测试
+```
+wget -O nf https://github.com/sjlleo/netflix-verify/releases/download/2.5/nf_2.5_linux_amd64 && chmod +x nf && clear && ./nf
+```
+
 #### 节点搭建
 ```
 # 更新软件源
 apt update
-
-# 启用 BBR TCP 拥塞控制算法
-echo "net.core.default_qdisc=fq" >> /etc/sysctl.conf
-echo "net.ipv4.tcp_congestion_control=bbr" >> /etc/sysctl.conf
-sysctl -p
 
 # 安装x-ui：
 bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh)
