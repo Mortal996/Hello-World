@@ -50,6 +50,11 @@ apt update
 
 apt upgrade 
 ```
++ Debian 系统比较干净，安装常用的软件
+```
+apt install wget curl sudo vim git -y
+```
+
 #### [开启 TCP BBR 拥塞控制算法](https://blog.laoda.de/archives/hello-docker#5%E5%AE%89%E8%A3%85dockerdocker-compose)  
 新的 TCP 拥塞控制算法 BBR (Bottleneck Bandwidth and RTT) 可以让服务器的带宽尽量跑满，并且尽量不要有排队的情况，让网络服务更佳稳定和高效。
 
