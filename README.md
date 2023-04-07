@@ -235,7 +235,24 @@ bash <(curl -L -s https://raw.githubusercontent.com/lmc999/RegionRestrictionChec
 ```
 wget -O nf https://github.com/sjlleo/netflix-verify/releases/download/2.5/nf_2.5_linux_amd64 && chmod +x nf && clear && ./nf
 ```
-
++ GCP VPS主机支持Root的密码登录
+```
+#切换到root角色
+sudo -i 
+#修改SSH配置文件/etc/ssh/sshd_config
+vi /etc/ssh/sshd_config
+#修改PermitRootLogin和PasswordAuthentication为yes
+# Authentication:
+PermitRootLogin yes //默认为no，需要开启root用户访问改为yes
+# Change to no to disable tunnelled clear text passwords
+PasswordAuthentication yes //默认为no，改为yes开启密码登陆
+#给root用户设置密码
+passwd root
+#重启SSH服务使修改生效
+/etc/init.d/ssh restart
+#或者是：
+service sshd restart
+```
 #### 节点搭建
 ```
 # 更新软件源
