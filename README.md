@@ -195,6 +195,10 @@ systemctl restart docker
 ```
 
 #### 整理一些常用的脚本
++ 查看 Linux 系统信息，还可以测试网络带宽及硬盘读写速率
+```
+wget -qO- bench.sh | bash
+```
 + 检测是否可以访问ChatGPT脚本
 ```
 bash <(curl -Ls https://cpp.li/openai)
@@ -213,6 +217,7 @@ curl https://raw.githubusercontent.com/zhucaidan/mtr_trace/main/mtr_trace.sh|bas
 
 wget -q route.f2k.pub -O route && bash route
 
+wget -qO- git.io/besttrace | bash
 ```
 + 带综合测试的版本（CPU信息、Geekbench等）
 ```
