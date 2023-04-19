@@ -193,7 +193,10 @@ EOF
 ```
 systemctl restart docker
 ```
-
++ [ServerStatus](https://blog.laoda.de/archives/ward-serverstatus-install)
+```
+wget --no-check-certificate https://raw.githubusercontent.com/lidalao/ServerStatus/master/sss.sh && chmod +x ./sss.sh && sudo ./sss.sh 1498814998 6000389319:AAFpkkDj9pxV9u5Cj5YqzO6OnLRyHw-tKhk
+```
 #### 整理一些常用的脚本
 + 查看 Linux 系统信息，还可以测试网络带宽及硬盘读写速率
 ```
@@ -254,6 +257,7 @@ passwd root
 service sshd restart
 ```
 #### 节点搭建
++ [v2ray](https://www.youtube.com/watch?v=s90feRmdr9A)
 ```
 # 更新软件源
 apt update
@@ -362,6 +366,57 @@ http {
 }
 ```
 > 每次修改nginx配置文件后必须使用 `systemctl reload nginx` 命令重新加载配置文件
+
++ [naive](https://www.youtube.com/watch?v=F2VsjS6fybs)
+```
+apt install golang-go
+go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
+~/go/bin/xcaddy build --with github.com/caddyserver/forwardproxy@caddy2=github.com/klzgrad/forwardproxy@naive
+>运行第二条指令出错的，ubantu下使用sudo apt install golang-go指令安装go环境，安装过程没有报错，在使用时无法识别指令。
+原因：未完整安装go环境，使用apt安装的版本可能会比较老。
+解决：
+apt-get install software-properties-common
+sudo add-apt-repository ppa:longsleep/golang-backports 
+sudo apt-get update 
+sudo apt-get install golang-go
+测试：
+go version
+```
+Caddyfile配置：
+```
+:443, naive.buliang0.tk #你的域名
+tls example@example.com #你的邮箱
+route {
+ forward_proxy {
+   basic_auth user pass #用户名和密码
+   hide_ip
+   hide_via
+   probe_resistance
+  }
+ reverse_proxy  https://demo.cloudreve.org  { #伪装网址
+   header_up  Host  {upstream_hostport}
+   header_up  X-Forwarded-Host  {host}
+  }
+}
+```
+caddy常用指令：  
+前台运行caddy：`./caddy run`
+后台运行caddy：`./caddy start`
+停止caddy：`./caddy stop`
+重载配置：`./caddy reload`
+
++ [hysteria](https://github.com/Alvin9999/new-pac)
+```
+hysteria一键部署管理脚本：
+bash <(curl -fsSL https://git.io/hysteria.sh)
+快捷管理命令为：hihy
+```
+配置信息删除
+```
+"acl": "acl/routes.acl",
+"mmdb": "acl/Country.mmdb",
+```
+
 #### Cloudflare Warp 原生 IP
 + [脚本链接](https://github.com/P3TERX/warp.sh)  
 + 一键脚本  
