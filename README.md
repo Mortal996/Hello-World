@@ -367,7 +367,7 @@ http {
 ```
 > 每次修改nginx配置文件后必须使用 `systemctl reload nginx` 命令重新加载配置文件
 
-+ [naive](https://www.youtube.com/watch?v=F2VsjS6fybs)
++ [NaïveProxy](https://www.youtube.com/watch?v=F2VsjS6fybs)[github](https://github.com/klzgrad/naiveproxy)
 ```
 apt install golang-go
 go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
